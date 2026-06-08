@@ -1,39 +1,33 @@
-## React
+# Diotima Chang Personal Website
 
-This is a simple React application. This application serves as a basic template for a react applications.  
-This project is bootstrapped with [Vite](https://vitejs.dev/guide/).
+This repository contains the source for a Vite + React personal website.
 
-## How to run
+## Local Development
 
-1. Before running the application, make sure all dependencies are installed. To install dependencies, run following command in terminal:
+Install dependencies:
 
-   ```sh
-   npm install
-   ```
+```sh
+npm ci
+```
 
-2. Once dependencies are installed, run the following command to start the application:
+Start the development server:
 
-   ```sh
-   npm run dev
-   ```
+```sh
+npm run dev
+```
 
-3. Refresh the URL in simple browser to see the output.
+Build the static site:
 
-## FAQs & Debugging
+```sh
+npm run build
+```
 
-### 1. I do not see browser in my workspace
+The generated site is written to `dist/`.
 
-Studio will automatically open the app in a new browser tab. If not, you can use the following steps to open the simple browser
+## GitHub Pages
 
-1. From VS Code command pallette(`Ctrl/Cmd + Shift + P`), run **Studio Manager: SimpleBrowser Default URL** command. This will open the app in a new browser tab.
+The site is deployed by GitHub Actions from `.github/workflows/pages.yml`.
 
-2. Your app runs on hosted env which can be accessed using host id, port provided in file **.vscode/.studio/studio-env.json**. Use values to create the URL as follows:
-   `https://<STUDIO_HOST_ID>-3000.<STUDIO_DOMAIN>`
+When changes are pushed to `main`, the workflow installs dependencies, runs `npm run build`, uploads `dist/`, and deploys it to GitHub Pages.
 
-### 2. Getting `vite: not found` error
-
-This means node_modules are missing in your workspace, please refer the 'How to run' section and make sure you have followed the steps in sequence
-
-### 3. Can I use create-react-app instead Vite?
-
-Yes, you can use create-react-app instead Vite, the default workspace is loaded with Vite setup, you can remove the Vite dependencies, add create-react-app dependencies and update the scripts to start using create-react-app.
+The repository no longer needs `node_modules/`, `dist/`, or `dist.tar.gz` committed. Those files are generated locally or inside the GitHub Actions runner.

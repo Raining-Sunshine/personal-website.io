@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 
 const navItems = [
-  // 后续可以把 href 替换成真实子页面路径，例如："/blog"、"/links"、"/fanworks"、"/others"
   { label: "博客", href: "#blog" },
   { label: "相关链接", href: "#links" },
   { label: "同人", href: "#fanworks" },
@@ -10,11 +9,13 @@ const navItems = [
 ];
 
 export default function App() {
+  const assetBase = import.meta.env.BASE_URL;
+
   return (
     <div className="site-shell">
       <header className="hero-header">
         <img
-          src="/header.png"
+          src={`${assetBase}header.png`}
           alt="站点头图"
           className="hero-image"
         />
@@ -36,17 +37,17 @@ export default function App() {
       <main className="home-main">
         <section className="profile-card" aria-label="个人简介">
           <div className="avatar-wrap">
-            <img src="/avatar.jpg" alt="头像" className="avatar" />
+            <img src={`${assetBase}avatar.jpg`} alt="头像" className="avatar" />
           </div>
 
           <div className="intro-panel">
             <p className="eyebrow">About me</p>
-            <h1>Hi，This is Diotima</h1>
+            <h1>Hi, this is Diotima</h1>
             <p>
-              I enjoy material science and currently applying for my PhD. I mainly focus on computational material science and I am proficient in using COMSOL and Gaussian. I learnt them all myself. I also enjoy studing computer related stuffs like neural network, cyber security, algorithms...Everything related is cool to me. Besides that, I am also writing fanfiction on AO3. Most of my works are Chinese, But maybe I will publish some translation works one day. It's already in my to-do list now.
+              I enjoy materials science and am currently applying for PhD programs. My main focus is computational materials science, and I work with tools such as COMSOL and Gaussian. I also enjoy computer-related topics, including neural networks, cybersecurity, and algorithms.
             </p>
             <p>
-              You can see some of my works from the links below. I am also trying to merge them back into my own site.
+              I also write fanfiction on AO3. Most of my works are in Chinese, and I am gradually bringing links and notes back into this site.
             </p>
           </div>
         </section>
@@ -59,7 +60,7 @@ export default function App() {
 
           <article id="links" className="section-card">
             <h2>相关链接</h2>
-            <p>https://github.com/Raining-Sunshine,  https://archiveofourown.org/users/Diotima_Chang</p>
+            <p>https://github.com/Raining-Sunshine, https://archiveofourown.org/users/Diotima_Chang</p>
           </article>
 
           <article id="fanworks" className="section-card">
@@ -69,7 +70,7 @@ export default function App() {
 
           <article id="others" className="section-card">
             <h2>其他</h2>
-            <p>可以放杂项内容、公告、联系方式、页面更新日志等。</p>
+            <p>用于放置杂项内容、公告、联系方式和页面更新记录。</p>
           </article>
         </section>
       </main>
