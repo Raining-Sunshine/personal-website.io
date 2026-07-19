@@ -115,3 +115,55 @@ button, a { font: inherit; }
   html { scroll-behavior: auto; }
   .directory-card:hover { transform: none; }
 }
+.article-content ol {
+  line-height: 1.85;
+  margin: 0 0 18px 1.35rem;
+  padding: 0;
+}
+
+.article-content li {
+  margin: 4px 0;
+}
+
+.article-content a {
+  color: var(--violet);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.code-block {
+  position: relative;
+  margin: 18px 0 28px;
+  border: 1px solid rgba(126, 87, 194, 0.18);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #221f29;
+  box-shadow: 0 12px 28px rgba(31, 27, 36, 0.12);
+}
+
+.code-block button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 46px 18px 18px;
+  overflow-x: auto;
+}
+
+.code-block code {
+  color: #fff7fb;
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  white-space: pre;
+}

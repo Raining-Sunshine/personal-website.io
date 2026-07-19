@@ -2,19 +2,88 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 
 const keinsciUrl = "http://bbs.keinsci.com/thread-42564-1-1.html";
+const frpReleasesUrl = "https://github.com/fatedier/frp/releases/download/";
 const githubUrl = "https://github.com/Raining-Sunshine";
 const ao3Url = "https://archiveofourown.org/users/Diotima_Chang";
 
 const routes = {
   home: "home",
   blog: "blog",
-  simulation: "simulation",
-  life: "life",
+  modelling: "modelling",
   computer: "computer",
+  life: "life",
   article: "article",
+  frpRdp: "frp-rdp",
   fanfiction: "fanfiction",
   links: "links",
 };
+
+const serverConfig = `[root@host-cloud conf]                    # cat frps.toml
+[common]
+bindAddr = 0.0.0.0                        # 内网IP
+bindPort = 7000                           # TCP 开放端口
+bind_udp_port = 7000                      # UDP 开放端口
+vhostHTTPPort = 80
+vhostHTTPSPort = 443
+dashboard_addr = 0.0.0.0                  # 内网IP
+dashboard_port = 7500
+dashboard_user = 【admin】                  # dashboard Username
+dashboard_pwd = 【admin】                   # dashboard Password
+enable_prometheus = true
+log_file = ./logs/frps.log                # 日志地址
+log_level = info
+log_max_days = 1                          # 日志保留天数
+disable_log_color = false
+detailed_errors_to_client = true
+authentication_method = token
+authenticate_heartbeats = false
+authenticate_new_work_conns = false
+token = 【123456789】                       # 链接 token
+oidc_skip_expiry_check = false
+oidc_skip_issuer_check = false
+allow_ports = 2000-3000,3001,3003,4000-50000
+max_pool_count = 5
+max_ports_per_client = 0
+tls_only = false
+tcp_mux = true
+udp_packet_size = 1500`;
+
+const clientConfig = `[common]
+# 云服务器的 IP 地址及 frps 里面设置的通信端口
+server_addr = 【**：**：**：**】
+server_port = 7000
+
+# token 与服务端设置一样
+token = 【123456789】
+
+# 设置日志文件记录路径
+log_file = ./logs/frpc.log
+# 设置日志记录级别，分别有 trace, debug, info, warn, error
+log_level = info
+# 设置日志记录最大天数
+log_max_days = 1
+
+# 设置本机面板
+admin_addr = 127.0.0.1
+admin_port = 7400
+admin_user = 【admin】
+admin_pwd = 【admin】
+
+# RDP，Windows 的 RDP 默认端口是 3389，协议为 TCP，转发到服务端【】中的端口
+[rdp]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 3389
+remote_port = 【7100】`;
+
+const batScript = `@echo off
+if "%1" == "h" goto begin
+mshta vbscript:createobject("wscript.shell").run("""%~nx0"" h",0)(window.close)&&exit
+:begin
+REM
+cd 【C:\\frp】 # frp 文件夹路径
+frpc -c frpc.ini
+exit`;
 
 function Header({ navigate }) {
   const assetBase = import.meta.env.BASE_URL;
@@ -30,8 +99,8 @@ function Header({ navigate }) {
       <div className="thin-strip" aria-hidden="true" />
       <nav className="main-nav" aria-label="Main navigation">
         <button onClick={() => navigate(routes.home)}>Home</button>
-        <button onClick={() => navigate(routes.blog)}>Blog</button>
-        <button onClick={() => navigate(routes.fanfiction)}>Fanfiction</button>
+        <button onClick={() => navigate(routes.blog)}>Blogs</button>
+        <button onClick={() => navigate(routes.fanfiction)}>Fanfictions</button>
         <button onClick={() => navigate(routes.links)}>Links</button>
       </nav>
     </>
@@ -65,6 +134,23 @@ function DirectoryCard({ title, description, onClick }) {
   );
 }
 
+function CodeBlock({ children }) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    await navigator.clipboard.writeText(children);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1500);
+  };
+
+  return (
+    <div className="code-block">
+      <button type="button" onClick={copy}>{copied ? "Copied" : "Copy"}</button>
+      <pre><code>{children}</code></pre>
+    </div>
+  );
+}
+
 function Home({ navigate }) {
   const assetBase = import.meta.env.BASE_URL;
 
@@ -88,9 +174,14 @@ function Home({ navigate }) {
 
       <section className="content-grid">
         <article className="section-card">
-          <h2>Blog</h2>
-          <p>Simulation, life, and computer-related notes.</p>
-          <button onClick={() => navigate(routes.blog)}>Open blog</button>
+          <h2>Blogs</h2>
+          <p>Modelling, computer, and life notes.</p>
+          <button onClick={() => navigate(routes.blog)}>Open blogs</button>
+        </article>
+        <article className="section-card">
+          <h2>Fanfictions</h2>
+          <p>A directory for fanfiction and fandom writing.</p>
+          <button onClick={() => navigate(routes.fanfiction)}>Open fanfictions</button>
         </article>
         <article className="section-card">
           <h2>Links</h2>
@@ -98,12 +189,7 @@ function Home({ navigate }) {
           <button onClick={() => navigate(routes.links)}>Open links</button>
         </article>
         <article className="section-card">
-          <h2>Fanfiction</h2>
-          <p>A directory for fanfiction and fandom writing.</p>
-          <button onClick={() => navigate(routes.fanfiction)}>Open fanfiction</button>
-        </article>
-        <article className="section-card">
-          <h2>Other</h2>
+          <h2>Others</h2>
           <p>Miscellaneous notes, announcements, contact details, and site updates.</p>
         </article>
       </section>
@@ -114,14 +200,14 @@ function Home({ navigate }) {
 function BlogDirectory({ navigate }) {
   return (
     <main className="sub-main">
-      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Blog" }]} />
+      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Blogs" }]} />
       <header className="sub-heading">
-        <h1>Blog</h1>
+        <h1>Blogs</h1>
       </header>
       <section className="directory-grid">
-        <DirectoryCard title="Simulation" description="Computational materials, modeling, and simulation notes." onClick={() => navigate(routes.simulation)} />
+        <DirectoryCard title="Modelling" description="Computational materials, modelling, and simulation notes." onClick={() => navigate(routes.modelling)} />
+        <DirectoryCard title="Computer" description="Computer science, security, algorithms, tools, and remote access notes." onClick={() => navigate(routes.computer)} />
         <DirectoryCard title="Life" description="Personal and everyday-life notes." onClick={() => navigate(routes.life)} />
-        <DirectoryCard title="Computing" description="Computer science, security, algorithms, and related topics." onClick={() => navigate(routes.computer)} />
       </section>
     </main>
   );
@@ -134,7 +220,7 @@ function CategoryPage({ category, navigate, children }) {
         navigate={navigate}
         items={[
           { label: "Home", route: routes.home },
-          { label: "Blog", route: routes.blog },
+          { label: "Blogs", route: routes.blog },
           { label: category },
         ]}
       />
@@ -165,7 +251,7 @@ function ArticleTemplate({ navigate }) {
         navigate={navigate}
         items={[
           { label: "Home", route: routes.home },
-          { label: "Blog", route: routes.blog },
+          { label: "Blogs", route: routes.blog },
           { label: "Life", route: routes.life },
           { label: "Article draft" },
         ]}
@@ -190,12 +276,84 @@ function ArticleTemplate({ navigate }) {
   );
 }
 
+function FrpRdpArticle({ navigate }) {
+  return (
+    <main className="sub-main">
+      <Breadcrumbs
+        navigate={navigate}
+        items={[
+          { label: "Home", route: routes.home },
+          { label: "Blogs", route: routes.blog },
+          { label: "Computer", route: routes.computer },
+          { label: "FRP remote desktop" },
+        ]}
+      />
+      <article className="article-template">
+        <div className="article-content">
+          <p className="article-meta">Computer / Remote access</p>
+          <h1>利用 frp 实现内网穿透的远程桌面配置记录</h1>
+          <p>
+            最近对于海外 IP，我常用的远程控制软件开始收费了。而且还挺贵。那这必然不能忍。于是果断卸载远控软件，决定用 frp 和新用户白嫖的谷歌云服务器搞一个内网穿透。
+          </p>
+
+          <h2>需要的设备</h2>
+          <ol>
+            <li>一台有公网 IP 的云服务器</li>
+            <li>需要控制的远程计算机</li>
+            <li>随便来的一台访问端</li>
+          </ol>
+          <p>
+            frp 项目的网址：<a href={frpReleasesUrl} target="_blank" rel="noreferrer">{frpReleasesUrl}</a>
+          </p>
+
+          <h2>服务器端配置</h2>
+          <p>打开云服务器 SSH。首先运行 wget 命令下载安装包，所有全角方括号内都需要替换。</p>
+          <CodeBlock>{"wget 【云服务器对应架构的对应安装包地址，x86 用 amd64，例如：https://github.com/fatedier/frp/..._linux_amd64.tar.gz】"}</CodeBlock>
+          <p>然后解压：</p>
+          <CodeBlock>{"tar -zxvf 【frp_0.53.2_linux_amd64.tar.gz】"}</CodeBlock>
+          <p>可以对文件夹改名：</p>
+          <CodeBlock>{"cp -r 【frp_0.53.2_linux_amd64】 【frp】"}</CodeBlock>
+          <p>进入文件夹：</p>
+          <CodeBlock>{"cd frp"}</CodeBlock>
+          <p>查看所有文件：</p>
+          <CodeBlock>{"ls -a"}</CodeBlock>
+          <p>去掉客户端配置文件：</p>
+          <CodeBlock>{`rm frpc
+rm frpc.toml`}</CodeBlock>
+          <p>修改 frps.toml 配置文件：</p>
+          <CodeBlock>{"vim frps.toml"}</CodeBlock>
+          <p>服务端的配置文件：</p>
+          <CodeBlock>{serverConfig}</CodeBlock>
+          <p>将上面的配置修改好后粘到 frps.toml，Esc 退出编辑并用 :wq! 保存。</p>
+          <p>让程序在后台运行：</p>
+          <CodeBlock>{"nohup ./frps -c frps.toml &"}</CodeBlock>
+          <p>
+            服务端配置结束，可以登录【公网 IP:7500】查看面板。密码是配置中的字段，之后退出 SSH。
+          </p>
+
+          <h2>客户端配置</h2>
+          <p>打开客户端电脑，我使用的是 Windows 11。同样下载 frp 安装包，可以删掉服务端文件 frps 和 frps.toml，具体操作不再赘述。</p>
+          <p>修改 toml 文件，将后缀名改成 ini 格式。ini 文件用文本编辑器打开，编辑配置为：</p>
+          <CodeBlock>{clientConfig}</CodeBlock>
+          <p>然后保存。新建一个文本，写入：</p>
+          <CodeBlock>{batScript}</CodeBlock>
+          <p>保存后将后缀名改为 bat，双击运行脚本。</p>
+          <p>此时服务端与客户端都配置完成。需要的话可以把这个 bat 挪到开机启动里面。</p>
+          <p>可以访问 127.0.0.1:7400 查看面板。</p>
+          <p>远程访问时，机器直接填【公网 IP:RDP 端口】即可。比如本例中就是【公网 IP:7100】。</p>
+          <p>目前我这里面防护还是比较薄弱，后面可以做一个访问前的验证。看到某些帖子说 STCP 比较稳，准备看看。</p>
+        </div>
+      </article>
+    </main>
+  );
+}
+
 function Fanfiction({ navigate, openEmbed }) {
   return (
     <main className="sub-main">
-      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Fanfiction" }]} />
+      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Fanfictions" }]} />
       <header className="sub-heading">
-        <h1>Fanfiction</h1>
+        <h1>Fanfictions</h1>
       </header>
       <section className="directory-grid single">
         <button className="directory-card" onClick={openEmbed}>
@@ -278,7 +436,7 @@ export default function App() {
   useEffect(() => {
     const sync = () => {
       const next = location.hash.replace("#/", "") || routes.home;
-      setRoute(Object.hasOwn(routes, next) ? next : routes.home);
+      setRoute(Object.values(routes).includes(next) ? next : routes.home);
     };
 
     sync();
@@ -294,10 +452,16 @@ export default function App() {
   let content;
   if (route === routes.blog) {
     content = <BlogDirectory navigate={navigate} />;
-  } else if (route === routes.simulation) {
+  } else if (route === routes.modelling) {
     content = (
-      <CategoryPage category="Simulation" navigate={navigate}>
+      <CategoryPage category="Modelling" navigate={navigate}>
         <Entry title="Computational Chemistry Forum Blog" label="External link" onClick={() => setMask({ title: "Computational Chemistry Forum Blog", url: keinsciUrl, embedded: false })} />
+      </CategoryPage>
+    );
+  } else if (route === routes.computer) {
+    content = (
+      <CategoryPage category="Computer" navigate={navigate}>
+        <Entry title="利用 frp 实现内网穿透的远程桌面配置记录" label="Remote desktop" onClick={() => navigate(routes.frpRdp)} />
       </CategoryPage>
     );
   } else if (route === routes.life) {
@@ -306,14 +470,10 @@ export default function App() {
         <Entry title="Article draft" label="Site article" onClick={() => navigate(routes.article)} />
       </CategoryPage>
     );
-  } else if (route === routes.computer) {
-    content = (
-      <CategoryPage category="Computing" navigate={navigate}>
-        <Entry title="Article draft" label="Site article" />
-      </CategoryPage>
-    );
   } else if (route === routes.article) {
     content = <ArticleTemplate navigate={navigate} />;
+  } else if (route === routes.frpRdp) {
+    content = <FrpRdpArticle navigate={navigate} />;
   } else if (route === routes.fanfiction) {
     content = <Fanfiction navigate={navigate} openEmbed={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
   } else if (route === routes.links) {
