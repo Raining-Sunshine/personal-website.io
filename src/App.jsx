@@ -12,7 +12,7 @@ const routes = {
   life: "life",
   computer: "computer",
   article: "article",
-  fanworks: "fanworks",
+  fanfiction: "fanfiction",
   links: "links",
 };
 
@@ -22,17 +22,17 @@ function Header({ navigate }) {
   return (
     <>
       <header className="hero-header">
-        <img src={`${assetBase}header.png`} alt="站点头图" className="hero-image" />
+        <img src={`${assetBase}header.png`} alt="Site header" className="hero-image" />
         <div className="hero-overlay">
           <div className="site-title">Diotima Chang</div>
         </div>
       </header>
       <div className="thin-strip" aria-hidden="true" />
-      <nav className="main-nav" aria-label="主导航">
-        <button onClick={() => navigate(routes.home)}>首页</button>
-        <button onClick={() => navigate(routes.blog)}>博客</button>
-        <button onClick={() => navigate(routes.fanworks)}>同人</button>
-        <button onClick={() => navigate(routes.links)}>相关链接</button>
+      <nav className="main-nav" aria-label="Main navigation">
+        <button onClick={() => navigate(routes.home)}>Home</button>
+        <button onClick={() => navigate(routes.blog)}>Blog</button>
+        <button onClick={() => navigate(routes.fanfiction)}>Fanfiction</button>
+        <button onClick={() => navigate(routes.links)}>Links</button>
       </nav>
     </>
   );
@@ -40,7 +40,7 @@ function Header({ navigate }) {
 
 function Breadcrumbs({ items, navigate }) {
   return (
-    <nav className="breadcrumbs" aria-label="面包屑导航">
+    <nav className="breadcrumbs" aria-label="Breadcrumbs">
       {items.map((item, index) => (
         <span key={`${item.label}-${index}`}>
           {index > 0 && <i>/</i>}
@@ -60,7 +60,7 @@ function DirectoryCard({ title, description, onClick }) {
     <button className="directory-card" onClick={onClick}>
       <h2>{title}</h2>
       <p>{description}</p>
-      <span>进入目录</span>
+      <span>Open directory</span>
     </button>
   );
 }
@@ -70,9 +70,9 @@ function Home({ navigate }) {
 
   return (
     <main className="home-main">
-      <section className="profile-card" aria-label="个人简介">
+      <section className="profile-card" aria-label="Profile">
         <div className="avatar-wrap">
-          <img src={`${assetBase}avatar.jpg`} alt="头像" className="avatar" />
+          <img src={`${assetBase}avatar.jpg`} alt="Avatar" className="avatar" />
         </div>
         <div className="intro-panel">
           <p className="eyebrow">About me</p>
@@ -88,23 +88,23 @@ function Home({ navigate }) {
 
       <section className="content-grid">
         <article className="section-card">
-          <h2>Blogs</h2>
-          <p>模拟与仿真、生活、计算机。</p>
-          <button onClick={() => navigate(routes.blog)}>进入博客</button>
+          <h2>Blog</h2>
+          <p>Simulation, life, and computer-related notes.</p>
+          <button onClick={() => navigate(routes.blog)}>Open blog</button>
         </article>
         <article className="section-card">
-          <h2>相关链接</h2>
-          <p>GitHub、Archive of Our Own。</p>
-          <button onClick={() => navigate(routes.links)}>进入目录</button>
+          <h2>Links</h2>
+          <p>GitHub and Archive of Our Own.</p>
+          <button onClick={() => navigate(routes.links)}>Open links</button>
         </article>
         <article className="section-card">
-          <h2>同人</h2>
-          <p>同人创作目录。</p>
-          <button onClick={() => navigate(routes.fanworks)}>进入目录</button>
+          <h2>Fanfiction</h2>
+          <p>A directory for fanfiction and fandom writing.</p>
+          <button onClick={() => navigate(routes.fanfiction)}>Open fanfiction</button>
         </article>
         <article className="section-card">
-          <h2>其他</h2>
-          <p>用于放置杂项内容、公告、联系方式和页面更新记录。</p>
+          <h2>Other</h2>
+          <p>Miscellaneous notes, announcements, contact details, and site updates.</p>
         </article>
       </section>
     </main>
@@ -114,14 +114,14 @@ function Home({ navigate }) {
 function BlogDirectory({ navigate }) {
   return (
     <main className="sub-main">
-      <Breadcrumbs navigate={navigate} items={[{ label: "主站", route: routes.home }, { label: "博客" }]} />
+      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Blog" }]} />
       <header className="sub-heading">
-        <h1>博客</h1>
+        <h1>Blog</h1>
       </header>
       <section className="directory-grid">
-        <DirectoryCard title="模拟与仿真" description="计算材料、模拟与仿真相关内容。" onClick={() => navigate(routes.simulation)} />
-        <DirectoryCard title="生活" description="生活相关内容。" onClick={() => navigate(routes.life)} />
-        <DirectoryCard title="计算机" description="计算机相关内容。" onClick={() => navigate(routes.computer)} />
+        <DirectoryCard title="Simulation" description="Computational materials, modeling, and simulation notes." onClick={() => navigate(routes.simulation)} />
+        <DirectoryCard title="Life" description="Personal and everyday-life notes." onClick={() => navigate(routes.life)} />
+        <DirectoryCard title="Computing" description="Computer science, security, algorithms, and related topics." onClick={() => navigate(routes.computer)} />
       </section>
     </main>
   );
@@ -133,8 +133,8 @@ function CategoryPage({ category, navigate, children }) {
       <Breadcrumbs
         navigate={navigate}
         items={[
-          { label: "主站", route: routes.home },
-          { label: "博客", route: routes.blog },
+          { label: "Home", route: routes.home },
+          { label: "Blog", route: routes.blog },
           { label: category },
         ]}
       />
@@ -153,7 +153,7 @@ function Entry({ title, label, onClick }) {
         <span>{label}</span>
         <h2>{title}</h2>
       </div>
-      {onClick ? <button onClick={onClick}>打开</button> : <span className="pending">待填充</span>}
+      {onClick ? <button onClick={onClick}>Open</button> : <span className="pending">To be filled</span>}
     </article>
   );
 }
@@ -164,44 +164,44 @@ function ArticleTemplate({ navigate }) {
       <Breadcrumbs
         navigate={navigate}
         items={[
-          { label: "主站", route: routes.home },
-          { label: "博客", route: routes.blog },
-          { label: "生活", route: routes.life },
-          { label: "子页面" },
+          { label: "Home", route: routes.home },
+          { label: "Blog", route: routes.blog },
+          { label: "Life", route: routes.life },
+          { label: "Article draft" },
         ]}
       />
       <article className="article-template">
-        <div className="article-cover">插入图片</div>
+        <div className="article-cover">Image placeholder</div>
         <div className="article-content">
-          <p className="article-meta">日期 / 分类</p>
-          <h1>文章大标题</h1>
-          <p className="article-subtitle">文章副标题</p>
-          <h2>小标题</h2>
-          <p>在这里填写正文。</p>
+          <p className="article-meta">Date / Category</p>
+          <h1>Article title</h1>
+          <p className="article-subtitle">Article subtitle</p>
+          <h2>Section heading</h2>
+          <p>Write the article body here.</p>
           <figure>
-            <div className="article-image">插入图片</div>
-            <figcaption>图片说明</figcaption>
+            <div className="article-image">Image placeholder</div>
+            <figcaption>Image caption</figcaption>
           </figure>
-          <h2>小标题</h2>
-          <p>在这里填写正文。</p>
+          <h2>Section heading</h2>
+          <p>Write the article body here.</p>
         </div>
       </article>
     </main>
   );
 }
 
-function Fanworks({ navigate, openEmbed }) {
+function Fanfiction({ navigate, openEmbed }) {
   return (
     <main className="sub-main">
-      <Breadcrumbs navigate={navigate} items={[{ label: "主站", route: routes.home }, { label: "同人" }]} />
+      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Fanfiction" }]} />
       <header className="sub-heading">
-        <h1>同人</h1>
+        <h1>Fanfiction</h1>
       </header>
       <section className="directory-grid single">
         <button className="directory-card" onClick={openEmbed}>
           <h2>Archive of Our Own</h2>
           <p>Diotima_Chang</p>
-          <span>嵌入式浏览</span>
+          <span>Open embedded view</span>
         </button>
       </section>
     </main>
@@ -211,20 +211,20 @@ function Fanworks({ navigate, openEmbed }) {
 function Links({ navigate, openAo3 }) {
   return (
     <main className="sub-main">
-      <Breadcrumbs navigate={navigate} items={[{ label: "主站", route: routes.home }, { label: "相关链接" }]} />
+      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Links" }]} />
       <header className="sub-heading">
-        <h1>相关链接</h1>
+        <h1>Links</h1>
       </header>
       <section className="directory-grid links-directory">
         <a className="directory-card" href={githubUrl} target="_blank" rel="noreferrer">
           <h2>GitHub</h2>
           <p>Raining-Sunshine</p>
-          <span>打开网页</span>
+          <span>Open page</span>
         </a>
         <button className="directory-card" onClick={openAo3}>
           <h2>Archive of Our Own</h2>
           <p>Diotima_Chang</p>
-          <span>嵌入式浏览</span>
+          <span>Open embedded view</span>
         </button>
       </section>
     </main>
@@ -250,20 +250,20 @@ function ExternalMask({ title, url, embedded, close }) {
         <header>
           <strong>{title}</strong>
           <div>
-            <a href={url} target="_blank" rel="noreferrer">打开原网页</a>
-            <button onClick={close} aria-label="关闭">×</button>
+            <a href={url} target="_blank" rel="noreferrer">Open original page</a>
+            <button onClick={close} aria-label="Close">x</button>
           </div>
         </header>
         {embedded ? (
           <div className="iframe-wrap">
             <iframe src={url} title={title} />
-            <p>如果网页不允许嵌入，请点击“打开原网页”。</p>
+            <p>If the page blocks embedding, use "Open original page".</p>
           </div>
         ) : (
           <div className="link-mask">
             <h2>{title}</h2>
-            <p>此外链使用 HTTP，无法安全嵌入 HTTPS 页面。</p>
-            <a href={url} target="_blank" rel="noreferrer">前往原网页</a>
+            <p>This external link uses HTTP, so it cannot be safely embedded inside an HTTPS page.</p>
+            <a href={url} target="_blank" rel="noreferrer">Go to original page</a>
           </div>
         )}
       </div>
@@ -296,26 +296,26 @@ export default function App() {
     content = <BlogDirectory navigate={navigate} />;
   } else if (route === routes.simulation) {
     content = (
-      <CategoryPage category="模拟与仿真" navigate={navigate}>
-        <Entry title="计算化学公社博客" label="外链" onClick={() => setMask({ title: "计算化学公社博客", url: keinsciUrl, embedded: false })} />
+      <CategoryPage category="Simulation" navigate={navigate}>
+        <Entry title="Computational Chemistry Forum Blog" label="External link" onClick={() => setMask({ title: "Computational Chemistry Forum Blog", url: keinsciUrl, embedded: false })} />
       </CategoryPage>
     );
   } else if (route === routes.life) {
     content = (
-      <CategoryPage category="生活" navigate={navigate}>
-        <Entry title="子页面" label="站内文章" onClick={() => navigate(routes.article)} />
+      <CategoryPage category="Life" navigate={navigate}>
+        <Entry title="Article draft" label="Site article" onClick={() => navigate(routes.article)} />
       </CategoryPage>
     );
   } else if (route === routes.computer) {
     content = (
-      <CategoryPage category="计算机" navigate={navigate}>
-        <Entry title="子页面" label="站内文章" />
+      <CategoryPage category="Computing" navigate={navigate}>
+        <Entry title="Article draft" label="Site article" />
       </CategoryPage>
     );
   } else if (route === routes.article) {
     content = <ArticleTemplate navigate={navigate} />;
-  } else if (route === routes.fanworks) {
-    content = <Fanworks navigate={navigate} openEmbed={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
+  } else if (route === routes.fanfiction) {
+    content = <Fanfiction navigate={navigate} openEmbed={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
   } else if (route === routes.links) {
     content = <Links navigate={navigate} openAo3={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
   } else {
