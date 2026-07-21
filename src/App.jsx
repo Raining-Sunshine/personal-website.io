@@ -7,7 +7,6 @@ const githubUrl = "https://github.com/Raining-Sunshine";
 const ao3Url = "https://archiveofourown.org/users/Diotima_Chang";
 const universalStudiosSourceUrl = "https://tima-chan.blogspot.com/2022/07/usb-universial-studio-beijing.html";
 const contactEmail = "diotimachang@diotimachang.com";
-const contactEndpoint = `https://formsubmit.co/ajax/${contactEmail}`;
 const contactCooldownMs = 60_000;
 const contactCooldownKey = "diotima-contact-last-sent";
 const blockedMessageTerms = [
@@ -483,6 +482,17 @@ function Contact({ navigate }) {
   const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("sent") !== "1") return;
+
+    setStatus("success");
+    setFeedback("Message sent. Thank you.");
+    params.delete("sent");
+    const query = params.toString();
+    history.replaceState(null, "", `${location.pathname}${query ? `?${query}` : ""}${location.hash}`);
+  }, []);
+
   const validateContent = (subject, message) => {
     const combined = `${subject} ${message}`.trim().toLowerCase();
     const compact = combined.replace(/\s/g, "");
@@ -504,8 +514,7 @@ function Contact({ navigate }) {
     return "";
   };
 
-  const submit = async (event) => {
-    event.preventDefault();
+  const submit = (event) => {
     const form = event.currentTarget;
     const formData = new FormData(form);
     const now = Date.now();
@@ -518,6 +527,7 @@ function Contact({ navigate }) {
     const remainingSeconds = Math.ceil((contactCooldownMs - (now - lastSent)) / 1000);
 
     if (remainingSeconds > 0) {
+      event.preventDefault();
       setStatus("error");
       setFeedback(`Please wait ${remainingSeconds} seconds before sending another message.`);
       return;
@@ -528,40 +538,18 @@ function Contact({ navigate }) {
       String(formData.get("message") || ""),
     );
     if (validationError) {
+      event.preventDefault();
       setStatus("error");
       setFeedback(validationError);
       return;
     }
 
     setStatus("sending");
-    setFeedback("");
-
+    setFeedback("Complete the CAPTCHA to send your message.");
     try {
-      const payload = Object.fromEntries(formData.entries());
-      const response = await fetch(contactEndpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error("Message delivery failed");
-      }
-
-      form.reset();
-      try {
-        localStorage.setItem(contactCooldownKey, String(Date.now()));
-      } catch {
-        // The message was sent even if the local cooldown cannot be stored.
-      }
-      setStatus("success");
-      setFeedback("Message sent. Thank you.");
+      localStorage.setItem(contactCooldownKey, String(Date.now()));
     } catch {
-      setStatus("error");
-      setFeedback("The message could not be sent. Please try again or use email.");
+      // Submission can continue when storage is unavailable.
     }
   };
 
@@ -572,13 +560,14 @@ function Contact({ navigate }) {
         <header className="contact-intro">
           <p className="eyebrow">Contact</p>
           <h1>Leave a message</h1>
-          <p>Send a note to Diotima, or write directly to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p>
         </header>
 
-        <form className="contact-form" onSubmit={submit}>
+        <form className="contact-form" action={`https://formsubmit.co/${contactEmail}`} method="POST" onSubmit={submit}>
           <input type="hidden" name="_subject" value="New message from diotimachang.com" />
           <input type="hidden" name="_template" value="table" />
           <input type="hidden" name="_blacklist" value={blockedMessageTerms.join(", ")} />
+          <input type="hidden" name="_captcha" value="true" />
+          <input type="hidden" name="_next" value={`${location.origin}${location.pathname}?sent=1#/contact`} />
           <div className="contact-honey" aria-hidden="true">
             <label htmlFor="contact-website">Website</label>
             <input id="contact-website" type="text" name="_honey" tabIndex="-1" autoComplete="off" />
