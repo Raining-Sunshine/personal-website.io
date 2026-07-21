@@ -6,6 +6,24 @@ const frpReleasesUrl = "https://github.com/fatedier/frp/releases/download/";
 const githubUrl = "https://github.com/Raining-Sunshine";
 const ao3Url = "https://archiveofourown.org/users/Diotima_Chang";
 const universalStudiosSourceUrl = "https://tima-chan.blogspot.com/2022/07/usb-universial-studio-beijing.html";
+const contactEmail = "diotimachang@diotimachang.com";
+const contactEndpoint = `https://formsubmit.co/ajax/${contactEmail}`;
+const contactCooldownMs = 60_000;
+const contactCooldownKey = "diotima-contact-last-sent";
+const blockedMessageTerms = [
+  "fuck",
+  "shit",
+  "bitch",
+  "傻逼",
+  "操你妈",
+  "博彩",
+  "赌场",
+  "代开发票",
+  "色情推广",
+  "casino",
+  "buy followers",
+  "crypto giveaway",
+];
 
 const routes = {
   home: "home",
@@ -17,6 +35,7 @@ const routes = {
   frpRdp: "frp-rdp",
   fanfiction: "fanfiction",
   links: "links",
+  contact: "contact",
 };
 
 const serverConfig = `[root@host-cloud conf]                    # cat frps.toml
@@ -191,7 +210,8 @@ function Home({ navigate }) {
         </article>
         <article className="section-card">
           <h2>Others</h2>
-          <p>Miscellaneous notes, announcements, contact details, and site updates.</p>
+          <p>Contact details, messages, announcements, and site updates.</p>
+          <button onClick={() => navigate(routes.contact)}>Leave a message</button>
         </article>
       </section>
     </main>
@@ -459,6 +479,146 @@ function Links({ navigate, openAo3 }) {
   );
 }
 
+function Contact({ navigate }) {
+  const [status, setStatus] = useState("idle");
+  const [feedback, setFeedback] = useState("");
+
+  const validateContent = (subject, message) => {
+    const combined = `${subject} ${message}`.trim().toLowerCase();
+    const compact = combined.replace(/\s/g, "");
+    const uniqueCharacters = new Set(compact).size;
+    const linkCount = (combined.match(/https?:\/\/|www\./g) || []).length;
+
+    if (compact.length < 20) {
+      return "Please write a little more so the message has enough context.";
+    }
+    if (/(.)\1{7,}/u.test(compact) || uniqueCharacters / compact.length < 0.12) {
+      return "The message looks repetitive. Please add meaningful details.";
+    }
+    if (linkCount > 2) {
+      return "Please include no more than two links.";
+    }
+    if (blockedMessageTerms.some((term) => combined.includes(term))) {
+      return "The message contains blocked language.";
+    }
+    return "";
+  };
+
+  const submit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const now = Date.now();
+    let lastSent = 0;
+    try {
+      lastSent = Number(localStorage.getItem(contactCooldownKey) || 0);
+    } catch {
+      // Storage can be unavailable in strict privacy modes.
+    }
+    const remainingSeconds = Math.ceil((contactCooldownMs - (now - lastSent)) / 1000);
+
+    if (remainingSeconds > 0) {
+      setStatus("error");
+      setFeedback(`Please wait ${remainingSeconds} seconds before sending another message.`);
+      return;
+    }
+
+    const validationError = validateContent(
+      String(formData.get("subject") || ""),
+      String(formData.get("message") || ""),
+    );
+    if (validationError) {
+      setStatus("error");
+      setFeedback(validationError);
+      return;
+    }
+
+    setStatus("sending");
+    setFeedback("");
+
+    try {
+      const payload = Object.fromEntries(formData.entries());
+      const response = await fetch(contactEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Message delivery failed");
+      }
+
+      form.reset();
+      try {
+        localStorage.setItem(contactCooldownKey, String(Date.now()));
+      } catch {
+        // The message was sent even if the local cooldown cannot be stored.
+      }
+      setStatus("success");
+      setFeedback("Message sent. Thank you.");
+    } catch {
+      setStatus("error");
+      setFeedback("The message could not be sent. Please try again or use email.");
+    }
+  };
+
+  return (
+    <main className="sub-main">
+      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Contact" }]} />
+      <article className="contact-panel">
+        <header className="contact-intro">
+          <p className="eyebrow">Contact</p>
+          <h1>Leave a message</h1>
+          <p>Send a note to Diotima, or write directly to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p>
+        </header>
+
+        <form className="contact-form" onSubmit={submit}>
+          <input type="hidden" name="_subject" value="New message from diotimachang.com" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_blacklist" value={blockedMessageTerms.join(", ")} />
+          <div className="contact-honey" aria-hidden="true">
+            <label htmlFor="contact-website">Website</label>
+            <input id="contact-website" type="text" name="_honey" tabIndex="-1" autoComplete="off" />
+          </div>
+
+          <div className="contact-field-row">
+            <label>
+              <span>Name</span>
+              <input type="text" name="name" autoComplete="name" required maxLength="80" />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" autoComplete="email" required maxLength="160" />
+            </label>
+          </div>
+
+          <label>
+            <span>Subject</span>
+            <input type="text" name="subject" required maxLength="120" />
+          </label>
+
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="8" required maxLength="5000" />
+          </label>
+
+          <div className="contact-actions">
+            <button type="submit" disabled={status === "sending"}>
+              {status === "sending" ? "Sending..." : "Send message"}
+            </button>
+            <p className={`contact-status ${status}`} role="status" aria-live="polite">
+              {feedback}
+            </p>
+          </div>
+        </form>
+      </article>
+    </main>
+  );
+}
+
 function ExternalMask({ title, url, embedded, close }) {
   useEffect(() => {
     const handler = (event) => event.key === "Escape" && close();
@@ -548,6 +708,8 @@ export default function App() {
     content = <Fanfiction navigate={navigate} openEmbed={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
   } else if (route === routes.links) {
     content = <Links navigate={navigate} openAo3={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
+  } else if (route === routes.contact) {
+    content = <Contact navigate={navigate} />;
   } else {
     content = <Home navigate={navigate} />;
   }
