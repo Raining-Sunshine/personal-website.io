@@ -660,17 +660,24 @@ export default function App() {
 
   useEffect(() => {
     const sync = () => {
-      const next = location.hash.replace("#/", "") || routes.home;
+      const legacyRoute = location.hash.replace("#/", "");
+      if (legacyRoute && Object.values(routes).includes(legacyRoute)) {
+        history.replaceState(null, "", legacyRoute === routes.home ? "/" : `/${legacyRoute}`);
+      }
+
+      const next = location.pathname.replace(/^\/+|\/+$/g, "") || routes.home;
       setRoute(Object.values(routes).includes(next) ? next : routes.home);
     };
 
     sync();
-    addEventListener("hashchange", sync);
-    return () => removeEventListener("hashchange", sync);
+    addEventListener("popstate", sync);
+    return () => removeEventListener("popstate", sync);
   }, []);
 
   const navigate = (next) => {
-    location.hash = `#/${next}`;
+    const path = next === routes.home ? "/" : `/${next}`;
+    history.pushState(null, "", path);
+    setRoute(next);
     scrollTo({ top: 0, behavior: "smooth" });
   };
 
