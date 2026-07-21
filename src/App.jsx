@@ -5,6 +5,7 @@ const keinsciUrl = "http://bbs.keinsci.com/thread-42564-1-1.html";
 const frpReleasesUrl = "https://github.com/fatedier/frp/releases/download/";
 const githubUrl = "https://github.com/Raining-Sunshine";
 const ao3Url = "https://archiveofourown.org/users/Diotima_Chang";
+const academicCvUrl = "https://academic.diotimachang.com";
 const universalStudiosSourceUrl = "https://tima-chan.blogspot.com/2022/07/usb-universial-studio-beijing.html";
 const contactEmail = "diotima@diotimachang.com";
 const contactCooldownMs = 60_000;
@@ -473,6 +474,11 @@ function Links({ navigate, openAo3 }) {
           <p>Diotima_Chang</p>
           <span>Open embedded view</span>
         </button>
+        <a className="directory-card" href={academicCvUrl} target="_blank" rel="noreferrer">
+          <h2>Academic CV</h2>
+          <p>Yuyang Zhang</p>
+          <span>Open page</span>
+        </a>
       </section>
     </main>
   );
