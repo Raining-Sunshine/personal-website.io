@@ -209,7 +209,7 @@ function Home({ navigate }) {
         </article>
         <article className="section-card">
           <h2>Others</h2>
-          <p>Contact details, messages, announcements, and site updates.</p>
+          <p>Latest update: 2026-07-21 16:13 (UTC+8).</p>
           <button onClick={() => navigate(routes.contact)}>Leave a message</button>
         </article>
       </section>
