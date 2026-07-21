@@ -33,7 +33,7 @@ const routes = {
   life: "life",
   universalStudios: "universal-studios-beijing",
   frpRdp: "frp-rdp",
-  fanfiction: "fanfiction",
+  research: "research",
   links: "links",
   contact: "contact",
 };
@@ -120,7 +120,7 @@ function Header({ navigate }) {
       <nav className="main-nav" aria-label="Main navigation">
         <button onClick={() => navigate(routes.home)}>Home</button>
         <button onClick={() => navigate(routes.blog)}>Blogs</button>
-        <button onClick={() => navigate(routes.fanfiction)}>Fanfictions</button>
+        <button onClick={() => navigate(routes.research)}>Research</button>
         <button onClick={() => navigate(routes.links)}>Links</button>
       </nav>
     </>
@@ -199,17 +199,17 @@ function Home({ navigate }) {
           <button onClick={() => navigate(routes.blog)}>Open blogs</button>
         </article>
         <article className="section-card">
-          <h2>Fanfictions</h2>
-          <p>A directory for fanfiction and fandom writing.</p>
-          <button onClick={() => navigate(routes.fanfiction)}>Open fanfictions</button>
+          <h2>Research</h2>
+          <p>Academic CV and research work.</p>
+          <button onClick={() => navigate(routes.research)}>Open research</button>
         </article>
         <article className="section-card">
           <h2>Links</h2>
-          <p>GitHub and Archive of Our Own.</p>
+          <p>GitHub and AO3.</p>
           <button onClick={() => navigate(routes.links)}>Open links</button>
         </article>
         <article className="section-card">
-          <h2>Others</h2>
+          <h2>Contact me</h2>
           <p>Latest update: 2026-07-21 16:13 (UTC+8).</p>
           <button onClick={() => navigate(routes.contact)}>Leave a message</button>
         </article>
@@ -438,19 +438,19 @@ rm frpc.toml`}</CodeBlock>
   );
 }
 
-function Fanfiction({ navigate, openEmbed }) {
+function Research({ navigate }) {
   return (
     <main className="sub-main">
-      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Fanfictions" }]} />
+      <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Research" }]} />
       <header className="sub-heading">
-        <h1>Fanfictions</h1>
+        <h1>Research</h1>
       </header>
       <section className="directory-grid single">
-        <button className="directory-card" onClick={openEmbed}>
-          <h2>Archive of Our Own</h2>
-          <p>Diotima_Chang</p>
-          <span>Open embedded view</span>
-        </button>
+        <a className="directory-card" href={academicCvUrl} target="_blank" rel="noreferrer">
+          <h2>Academic CV</h2>
+          <p>academic.diotimachang.com</p>
+          <span>Open page</span>
+        </a>
       </section>
     </main>
   );
@@ -474,11 +474,6 @@ function Links({ navigate, openAo3 }) {
           <p>Diotima_Chang</p>
           <span>Open embedded view</span>
         </button>
-        <a className="directory-card" href={academicCvUrl} target="_blank" rel="noreferrer">
-          <h2>Academic CV</h2>
-          <p>Yuyang Zhang</p>
-          <span>Open page</span>
-        </a>
       </section>
     </main>
   );
@@ -660,11 +655,6 @@ export default function App() {
 
   useEffect(() => {
     const sync = () => {
-      const legacyRoute = location.hash.replace("#/", "");
-      if (legacyRoute && Object.values(routes).includes(legacyRoute)) {
-        history.replaceState(null, "", legacyRoute === routes.home ? "/" : `/${legacyRoute}`);
-      }
-
       const next = location.pathname.replace(/^\/+|\/+$/g, "") || routes.home;
       setRoute(Object.values(routes).includes(next) ? next : routes.home);
     };
@@ -706,8 +696,8 @@ export default function App() {
     content = <UniversalStudiosArticle navigate={navigate} />;
   } else if (route === routes.frpRdp) {
     content = <FrpRdpArticle navigate={navigate} />;
-  } else if (route === routes.fanfiction) {
-    content = <Fanfiction navigate={navigate} openEmbed={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
+  } else if (route === routes.research) {
+    content = <Research navigate={navigate} />;
   } else if (route === routes.links) {
     content = <Links navigate={navigate} openAo3={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
   } else if (route === routes.contact) {
