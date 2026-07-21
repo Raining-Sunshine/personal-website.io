@@ -448,7 +448,6 @@ function Research({ navigate }) {
       <section className="directory-grid single">
         <a className="directory-card" href={academicCvUrl} target="_blank" rel="noreferrer">
           <h2>Academic CV</h2>
-          <p>academic.diotimachang.com</p>
           <span>Open page</span>
         </a>
       </section>
