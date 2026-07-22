@@ -120,8 +120,8 @@ button, a { font: inherit; }
   .content-grid { grid-template-columns: 1fr; }
   .profile-card { padding: 24px; }
   .avatar-wrap { width: 160px; height: 160px; }
-  .main-nav { justify-content: flex-start; padding-left: 20px; }
-  .main-nav > * { white-space: nowrap; }
+  .main-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; padding: 16px 8px; overflow: visible; }
+  .main-nav > * { width: 100%; min-width: 0; padding: 6px 2px; text-align: center; white-space: nowrap; font-size: 0.78rem; letter-spacing: 0.04em; }
   .entry-card { align-items: flex-start; flex-direction: column; }
   .contact-panel { padding: 28px 22px; }
   .contact-field-row { grid-template-columns: 1fr; }
