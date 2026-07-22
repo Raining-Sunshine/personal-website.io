@@ -195,12 +195,12 @@ function Home({ navigate }) {
       <section className="content-grid">
         <article className="section-card">
           <h2>Blogs</h2>
-          <p>Modelling, computer, and life notes.</p>
+          <p>Modelling, computer, and life.</p>
           <button onClick={() => navigate(routes.blog)}>Open blogs</button>
         </article>
         <article className="section-card">
           <h2>Research</h2>
-          <p>Academic CV and research work.</p>
+          <p>Academic CV and researchs.</p>
           <button onClick={() => navigate(routes.research)}>Open research</button>
         </article>
         <article className="section-card">
@@ -210,7 +210,7 @@ function Home({ navigate }) {
         </article>
         <article className="section-card">
           <h2>Contact me</h2>
-          <p>Latest update: 2026-07-21 16:13 (UTC+8).</p>
+          <p>Latest update: 2026-07-22 10:06 (UTC+8).</p>
           <button onClick={() => navigate(routes.contact)}>Leave a message</button>
         </article>
       </section>
