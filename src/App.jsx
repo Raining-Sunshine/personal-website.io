@@ -446,7 +446,7 @@ function Research({ navigate }) {
         <h1>Research</h1>
       </header>
       <section className="directory-grid single">
-        <a className="directory-card" href={academicCvUrl} target="_blank" rel="noreferrer">
+        <a className="directory-card compact" href={academicCvUrl} target="_blank" rel="noreferrer">
           <h2>Academic CV</h2>
           <span>Open page</span>
         </a>
