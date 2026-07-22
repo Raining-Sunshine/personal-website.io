@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
-const keinsciUrl = "http://bbs.keinsci.com/thread-42564-1-1.html";
+const keinsciUrl = "http://bbs.keinsci.com/?34803";
 const frpReleasesUrl = "https://github.com/fatedier/frp/releases/download/";
 const githubUrl = "https://github.com/Raining-Sunshine";
 const ao3Url = "https://archiveofourown.org/users/Diotima_Chang";
@@ -253,14 +253,20 @@ function CategoryPage({ category, navigate, children }) {
   );
 }
 
-function Entry({ title, label, onClick }) {
+function Entry({ title, label, onClick, href }) {
   return (
     <article className="entry-card">
       <div>
         <span>{label}</span>
         <h2>{title}</h2>
       </div>
-      {onClick ? <button onClick={onClick}>Open</button> : <span className="pending">To be filled</span>}
+      {href ? (
+        <a href={href} target="_blank" rel="noreferrer">Open page</a>
+      ) : onClick ? (
+        <button onClick={onClick}>Open</button>
+      ) : (
+        <span className="pending">To be filled</span>
+      )}
     </article>
   );
 }
@@ -455,7 +461,7 @@ function Research({ navigate }) {
   );
 }
 
-function Links({ navigate, openAo3 }) {
+function Links({ navigate }) {
   return (
     <main className="sub-main">
       <Breadcrumbs navigate={navigate} items={[{ label: "Home", route: routes.home }, { label: "Links" }]} />
@@ -468,11 +474,11 @@ function Links({ navigate, openAo3 }) {
           <p>Raining-Sunshine</p>
           <span>Open page</span>
         </a>
-        <button className="directory-card" onClick={openAo3}>
+        <a className="directory-card" href={ao3Url} target="_blank" rel="noreferrer">
           <h2>Archive of Our Own</h2>
           <p>Diotima_Chang</p>
-          <span>Open embedded view</span>
-        </button>
+          <span>Open page</span>
+        </a>
       </section>
     </main>
   );
@@ -608,49 +614,8 @@ function Contact({ navigate }) {
   );
 }
 
-function ExternalMask({ title, url, embedded, close }) {
-  useEffect(() => {
-    const handler = (event) => event.key === "Escape" && close();
-    addEventListener("keydown", handler);
-    return () => removeEventListener("keydown", handler);
-  }, [close]);
-
-  return (
-    <div
-      className="mask-backdrop"
-      role="dialog"
-      aria-modal="true"
-      aria-label={title}
-      onMouseDown={(event) => event.target === event.currentTarget && close()}
-    >
-      <div className="mask-panel">
-        <header>
-          <strong>{title}</strong>
-          <div>
-            <a href={url} target="_blank" rel="noreferrer">Open original page</a>
-            <button onClick={close} aria-label="Close">x</button>
-          </div>
-        </header>
-        {embedded ? (
-          <div className="iframe-wrap">
-            <iframe src={url} title={title} />
-            <p>If the page blocks embedding, use "Open original page".</p>
-          </div>
-        ) : (
-          <div className="link-mask">
-            <h2>{title}</h2>
-            <p>This external link uses HTTP, so it cannot be safely embedded inside an HTTPS page.</p>
-            <a href={url} target="_blank" rel="noreferrer">Go to original page</a>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export default function App() {
   const [route, setRoute] = useState(routes.home);
-  const [mask, setMask] = useState(null);
 
   useEffect(() => {
     const sync = () => {
@@ -676,7 +641,7 @@ export default function App() {
   } else if (route === routes.modelling) {
     content = (
       <CategoryPage category="Modelling" navigate={navigate}>
-        <Entry title="Computational Chemistry Forum Blog" label="External link" onClick={() => setMask({ title: "Computational Chemistry Forum Blog", url: keinsciUrl, embedded: false })} />
+        <Entry title="Computational Chemistry Forum Blog" label="External link" href={keinsciUrl} />
       </CategoryPage>
     );
   } else if (route === routes.computer) {
@@ -698,7 +663,7 @@ export default function App() {
   } else if (route === routes.research) {
     content = <Research navigate={navigate} />;
   } else if (route === routes.links) {
-    content = <Links navigate={navigate} openAo3={() => setMask({ title: "AO3 / Diotima_Chang", url: ao3Url, embedded: true })} />;
+    content = <Links navigate={navigate} />;
   } else if (route === routes.contact) {
     content = <Contact navigate={navigate} />;
   } else {
@@ -709,7 +674,6 @@ export default function App() {
     <>
       <Header navigate={navigate} />
       {content}
-      {mask && <ExternalMask {...mask} close={() => setMask(null)} />}
     </>
   );
 }
