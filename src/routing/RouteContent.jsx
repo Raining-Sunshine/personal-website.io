@@ -6,6 +6,7 @@ import Links from "../pages/Links";
 import Research from "../pages/Research";
 import BlogCategory from "../pages/blogs/BlogCategory";
 import BlogDirectory from "../pages/blogs/BlogDirectory";
+import BuildingPersonalWebsiteArticle from "../pages/blogs/articles/BuildingPersonalWebsiteArticle";
 import FrpRdpArticle from "../pages/blogs/articles/FrpRdpArticle";
 import UniversalStudiosArticle from "../pages/blogs/articles/UniversalStudiosArticle";
 
@@ -23,6 +24,8 @@ function RouteContent({ route, navigate }) {
       return <UniversalStudiosArticle navigate={navigate} />;
     case routes.frpRdp:
       return <FrpRdpArticle navigate={navigate} />;
+    case routes.buildingPersonalWebsite:
+      return <BuildingPersonalWebsiteArticle navigate={navigate} />;
     case routes.research:
       return <Research navigate={navigate} />;
     case routes.links:

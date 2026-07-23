@@ -6,6 +6,7 @@ export const routes = {
   life: "life",
   universalStudios: "universal-studios-beijing",
   frpRdp: "frp-rdp",
+  buildingPersonalWebsite: "blogs/computer/building-personal-website",
   research: "research",
   links: "links",
   contact: "contact",
