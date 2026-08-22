@@ -45,13 +45,22 @@ function NeuralNetworkIntroductionArticle({ navigate }) {
 
           <h2>From curve fitting to a neural network</h2>
           <p>
-            Real-world data are usually not this simple. One sample may contain hundreds or millions of features, and the relation between input and output may be highly nonlinear. A neural network builds a flexible function by stacking layers. Each layer first performs a weighted sum and then applies a nonlinear activation:
+            The point I want to emphasize is that training a neural network is still a kind of curve fitting. In the simple experiment above, we choose a function such as <em>ŷ = ax + b</em>, change <em>a</em> and <em>b</em>, and look for the line that stays closest to the observations. In a neural network, we again choose a function, adjust its parameters, and try to make its predictions stay close to the data. The basic task has not changed.
+          </p>
+          <p>
+            What changes is the scale and the shape of the function. Real-world data may contain hundreds or millions of input features, several outputs, and strongly nonlinear relations. The “curve” is therefore no longer a line that we can draw on paper. It may be a surface in a high-dimensional space, or a decision boundary separating different classes. We cannot see that surface directly, but numerically we can fit it in much the same way.
+          </p>
+          <p>
+            A neural network constructs this flexible fitting function by stacking layers. Each layer performs a weighted sum and then applies a nonlinear activation:
           </p>
           <div className="math-block" role="img" aria-label="h equals sigma of W x plus b">
             <var>h</var> = σ(<var>W</var><var>x</var> + <var>b</var>)
           </div>
           <p>
-            The weights <var>W</var> and biases <var>b</var> are the parameters adjusted during training. Once many layers are connected, the network can represent curves and surfaces that would be difficult to write down by hand.
+            The weights <var>W</var> and biases <var>b</var> play a role similar to the coefficients in an ordinary fitting equation. Once many layers are connected, these parameters describe curves and surfaces that would be difficult to write down by hand. A forward pass evaluates the current fitted function; the loss measures how far it is from the known data; backpropagation and the optimizer then move the parameters toward a better fit.
+          </p>
+          <p>
+            Even classification can be understood through this picture. Instead of fitting a line directly to a measured value, the network fits class scores or probabilities and places a boundary between groups of samples. Neural-network training is therefore not a completely different idea from curve fitting. It is curve fitting with a much more expressive function, many more parameters, and geometry that is usually too high-dimensional for us to draw.
           </p>
           <p>
             This is also where we often call a model large or small. Modern models can contain billions of parameters. Parameter count is not literally the dimensionality of the input data; instead, it is a rough description of the model&apos;s capacity. More parameters give the model more freedom, but they also make training, validation, and computational cost more important.
@@ -73,29 +82,43 @@ function NeuralNetworkIntroductionArticle({ navigate }) {
             <figcaption>A new point exposes the difference between fitting the training data and learning a general rule.</figcaption>
           </figure>
           <p>
-            This is why we split data into three sets for the whole training process. The training set adjusts the model parameters. The validation set helps us choose model size, regularization, and other settings while watching for overfitting. The test set is kept aside until the end and is used to estimate the final performance of the selected model.
+            If we judge the model only by the points used to fit it, the blue curve appears excellent: every training residual is almost zero. The new green point tells a different story. It represents data that the fitting process has not seen, and it exposes whether the learned rule can extend beyond the examples it has memorized. This is why one dataset must play several different roles rather than being used as one undivided collection.
           </p>
           <figure>
             <img className="article-photo article-photo-wide" src={`${imageBase}train-validation-test-split.png`} alt="Data split into red training, green validation, and cyan test points" />
             <figcaption>Red points are training data, green points are validation data, and cyan points are test data.</figcaption>
           </figure>
           <p>
-            The validation set does not directly correct the weights in the usual workflow. Instead, it guides decisions about the model and training process. Keeping the test set untouched is equally important; otherwise, we may unknowingly tune the model to the test itself.
+            The <strong>training set</strong> is the part repeatedly shown to the optimizer. Predictions and residuals are calculated on these samples, and backpropagation uses them to update the weights and biases. A model can always report an impressive training error if it is sufficiently flexible, so training performance alone cannot tell us whether the model has learned a transferable rule.
+          </p>
+          <p>
+            The <strong>validation set</strong> is not normally used to update the weights. Instead, we evaluate it during model development and use it to choose decisions outside the fitted parameters: the number of layers, the number of neurons, learning rate, regularization strength, training duration, or the point at which early stopping should occur. If training loss keeps decreasing while validation loss starts increasing, the model is probably beginning to overfit.
+          </p>
+          <p>
+            The <strong>test set</strong> is the final examination. It should remain untouched while we design the model and should ideally be evaluated only after the model and training procedure have been fixed. If we repeatedly inspect the test result and modify the model in response, the test set quietly becomes another validation set, and its reported performance becomes optimistic.
+          </p>
+          <p>
+            All three sets should represent the problem we actually want to solve. Their distributions should be comparable, while duplicated or strongly related samples must not leak across the split. For time-dependent experiments, repeated measurements, or data collected from several specimens, a random point-by-point split may be misleading; splitting by time, specimen, batch, or experimental condition can provide a more honest test of generalization.
           </p>
 
           <h2>Residuals and the loss function</h2>
           <p>
-            For simple two-dimensional data, we can use our eyes and physical insight to judge whether the fit looks reasonable. For a high-dimensional model, we cannot inspect every direction or manually adjust millions of parameters. We need a number that quantifies how well the model fits.
+            Before returning to neural networks, let us first look at the least-squares method in the two-dimensional example. Suppose the measured points are (<var>x</var><sub>i</sub>, <var>y</var><sub>i</sub>) and we want to fit a straight line <em>ŷ = ax + b</em>. For each point, the fitted line gives a prediction <em>ŷ</em><sub>i</sub>. The difference between the observation and prediction is the residual:
           </p>
-          <p>
-            As many readers know, in physics and statistics we often use the least-squares method. The same idea can be used as a loss function in neural-network training. Imagine a curved surface in a high-dimensional space, with most data points lying near it. We calculate the difference between each prediction and the corresponding observation, then minimize the sum of the squared differences:
-          </p>
-          <div className="math-block" role="img" aria-label="Mean squared error loss equals one over N times the sum of squared residuals">
-            <var>L</var>(θ) = <span>1 / <var>N</var></span> Σ<sub>i=1</sub><sup>N</sup> ‖<var>y</var><sub>i</sub> − <var>f</var>(<var>x</var><sub>i</sub>; θ)‖<sub>2</sub><sup>2</sup>
-            <span className="math-label">prediction error → residual → squared loss</span>
+          <div className="math-block" role="img" aria-label="Residual r i equals y i minus a x i plus b">
+            <var>r</var><sub>i</sub> = <var>y</var><sub>i</sub> − ŷ<sub>i</sub> = <var>y</var><sub>i</sub> − (<var>a</var><var>x</var><sub>i</sub> + <var>b</var>)
           </div>
           <p>
-            For an ordinary polynomial fit, the same relation can be written in matrix form. Each row of the design matrix contains the basis functions evaluated at one data point:
+            On the plot, this residual is the vertical distance from a point to the line, with a positive or negative sign. Simply adding residuals is not useful because positive and negative errors may cancel each other. Least squares therefore squares every residual and adds them together:
+          </p>
+          <div className="math-block" role="img" aria-label="Sum of squared errors equals the sum of squared residuals">
+            <var>S</var>(<var>a</var>, <var>b</var>) = Σ<sub>i=1</sub><sup>N</sup> <var>r</var><sub>i</sub><sup>2</sup> = Σ<sub>i=1</sub><sup>N</sup> [<var>y</var><sub>i</sub> − (<var>a</var><var>x</var><sub>i</sub> + <var>b</var>)]<sup>2</sup>
+          </div>
+          <p>
+            The best-fit line is the pair of <var>a</var> and <var>b</var> that minimizes <var>S</var>. Squaring prevents cancellation and makes a large error more expensive than several small errors. It is not the only possible definition of error, but it gives us a clear numerical target that can replace visual judgment.
+          </p>
+          <p>
+            We can extend the line to a polynomial and write the same fitting problem in matrix form. Each row of the design matrix contains the chosen basis functions evaluated at one data point:
           </p>
           <div className="math-block" role="img" aria-label="y equals X beta plus epsilon, with a polynomial design matrix">
             <var>y</var> = <var>X</var>β + ε, &nbsp;
@@ -108,7 +131,17 @@ function NeuralNetworkIntroductionArticle({ navigate }) {
             </span>
           </div>
           <p>
-            A Taylor series is suitable only for a limited range and situation. For wider ranges or different physical properties, we may use Fourier series, spherical harmonics, or other basis functions. A neural network goes one step further: instead of fixing every basis function in advance, it learns a hierarchy of useful representations from the data.
+            In this expression, β contains the coefficients we want to fit and ε contains the residuals. A Taylor or polynomial basis is suitable only for a limited range and situation. For periodic or angular problems, we may instead use Fourier series, spherical harmonics, or other basis functions. The fitting principle remains the same even when the basis changes.
+          </p>
+          <p>
+            Now return to a neural network. We replace the visible line or polynomial with a multilayer function <var>f</var>(<var>x</var>; θ), where θ collects all weights and biases. For one output, the residual is still “measurement minus prediction.” For many outputs, it becomes a vector. A common neural-network loss is the mean squared residual:
+          </p>
+          <div className="math-block" role="img" aria-label="Mean squared error loss equals one over N times the sum of squared residuals">
+            <var>L</var>(θ) = <span>1 / <var>N</var></span> Σ<sub>i=1</sub><sup>N</sup> ‖<var>y</var><sub>i</sub> − <var>f</var>(<var>x</var><sub>i</sub>; θ)‖<sub>2</sub><sup>2</sup>
+            <span className="math-label">the same least-squares idea, applied to a much more complicated fitting function</span>
+          </div>
+          <p>
+            This is the bridge from ordinary curve fitting to neural-network training. In two dimensions we move a line until its residuals are small. In a neural network we move millions or billions of parameters until a high-dimensional function produces small residuals. We need numerical optimization because we can no longer draw the fitted object or solve every model analytically, but the quantity being minimized comes from the same idea.
           </p>
 
           <h2>How training changes the model</h2>
