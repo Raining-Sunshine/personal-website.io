@@ -9,6 +9,7 @@ import BlogDirectory from "../pages/blogs/BlogDirectory";
 import BuildingPersonalWebsiteArticle from "../pages/blogs/articles/BuildingPersonalWebsiteArticle";
 import Comsol64GpuTestArticle from "../pages/blogs/articles/Comsol64GpuTestArticle";
 import FrpRdpArticle from "../pages/blogs/articles/FrpRdpArticle";
+import NeuralNetworkIntroductionArticle from "../pages/blogs/articles/NeuralNetworkIntroductionArticle";
 import UniversalStudiosArticle from "../pages/blogs/articles/UniversalStudiosArticle";
 
 function RouteContent({ route, navigate }) {
@@ -19,6 +20,8 @@ function RouteContent({ route, navigate }) {
       return <BlogCategory category="Modelling" entries={blogEntries.modelling} navigate={navigate} />;
     case routes.comsol64Test:
       return <Comsol64GpuTestArticle navigate={navigate} />;
+    case routes.neuralNetworkIntroduction:
+      return <NeuralNetworkIntroductionArticle navigate={navigate} />;
     case routes.computer:
       return <BlogCategory category="Computer" entries={blogEntries.computer} navigate={navigate} />;
     case routes.life:

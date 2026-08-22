@@ -3,6 +3,7 @@ export const routes = {
   blog: "blog",
   modelling: "modelling",
   comsol64Test: "blogs/modelling/COMSOL64-test",
+  neuralNetworkIntroduction: "blogs/modelling/neural-network-introduction",
   computer: "computer",
   life: "life",
   universalStudios: "universal-studios-beijing",
