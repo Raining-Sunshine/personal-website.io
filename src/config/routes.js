@@ -4,6 +4,7 @@ export const routes = {
   modelling: "modelling",
   comsol64Test: "blogs/modelling/COMSOL64-test",
   neuralNetworkIntroduction: "blogs/modelling/neural-network-introduction",
+  flaskGeometry: "blogs/modelling/flask-geometry-without-parametric-curves",
   computer: "computer",
   life: "life",
   universalStudios: "universal-studios-beijing",

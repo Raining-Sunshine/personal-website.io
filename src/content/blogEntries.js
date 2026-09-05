@@ -3,6 +3,7 @@ import { keinsciUrl } from "../config/site";
 
 export const blogEntries = {
   modelling: [
+    { title: "不使用参数化曲线，对烧瓶模型的几何建模", label: "Geometry / Bilingual", route: routes.flaskGeometry },
     { title: "How Does a Neural Network Work?", label: "Neural network / Basics", route: routes.neuralNetworkIntroduction },
     { title: "简单对COMSOL6.4的GPU加速做一个测试", label: "COMSOL / GPU", route: routes.comsol64Test },
     { title: "Computational Chemistry Forum Blog", label: "External link", href: keinsciUrl },

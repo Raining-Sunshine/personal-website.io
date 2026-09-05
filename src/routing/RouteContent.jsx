@@ -9,6 +9,7 @@ import BlogDirectory from "../pages/blogs/BlogDirectory";
 import BuildingPersonalWebsiteArticle from "../pages/blogs/articles/BuildingPersonalWebsiteArticle";
 import Comsol64GpuTestArticle from "../pages/blogs/articles/Comsol64GpuTestArticle";
 import FrpRdpArticle from "../pages/blogs/articles/FrpRdpArticle";
+import FlaskGeometryArticle from "../pages/blogs/articles/FlaskGeometryArticle";
 import NeuralNetworkIntroductionArticle from "../pages/blogs/articles/NeuralNetworkIntroductionArticle";
 import UniversalStudiosArticle from "../pages/blogs/articles/UniversalStudiosArticle";
 
@@ -22,6 +23,8 @@ function RouteContent({ route, navigate }) {
       return <Comsol64GpuTestArticle navigate={navigate} />;
     case routes.neuralNetworkIntroduction:
       return <NeuralNetworkIntroductionArticle navigate={navigate} />;
+    case routes.flaskGeometry:
+      return <FlaskGeometryArticle navigate={navigate} />;
     case routes.computer:
       return <BlogCategory category="Computer" entries={blogEntries.computer} navigate={navigate} />;
     case routes.life:
