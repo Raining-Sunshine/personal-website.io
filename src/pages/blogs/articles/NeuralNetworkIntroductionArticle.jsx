@@ -1,7 +1,11 @@
+import { useState } from "react";
+import ArticleLanguage from "../../../components/ui/ArticleLanguage";
 import Breadcrumbs from "../../../components/navigation/Breadcrumbs";
 import { routes } from "../../../config/routes";
+import NeuralNetworkIntroductionZh from "../translations/NeuralNetworkIntroductionZh";
 
 function NeuralNetworkIntroductionArticle({ navigate }) {
+  const [language, setLanguage] = useState("en");
   const imageBase = `${import.meta.env.BASE_URL}modelling/neural-network-introduction/`;
 
   return (
@@ -15,8 +19,11 @@ function NeuralNetworkIntroductionArticle({ navigate }) {
           { label: "Neural network introduction" },
         ]}
       />
-      <article className="article-template">
+      <article className="article-template" lang={language === "zh" ? "zh-CN" : "en"}>
         <div className="article-content">
+          <ArticleLanguage language={language} onChange={setLanguage} originalLanguage="en" />
+          {language === "en" ? (
+            <>
           <p className="article-meta">August 23, 2026 / Modelling / Neural Network</p>
           <h1>How Does a Neural Network Work?</h1>
           <p className="article-subtitle">Starting from curve fitting, residuals, and a simple physics experiment</p>
@@ -60,7 +67,7 @@ function NeuralNetworkIntroductionArticle({ navigate }) {
             The weights <var>W</var> and biases <var>b</var> play a role similar to the coefficients in an ordinary fitting equation. Once many layers are connected, these parameters describe curves and surfaces that would be difficult to write down by hand. A forward pass evaluates the current fitted function; the loss measures how far it is from the known data; backpropagation and the optimizer then move the parameters toward a better fit.
           </p>
           <p>
-            Even classification can be understood through this picture. Instead of fitting a line directly to a measured value, the network fits class scores or probabilities and places a boundary between groups of samples. Neural-network training is therefore not a completely different idea from curve fitting. It is curve fitting with a much more expressive function, many more parameters, and geometry that is usually too high-dimensional for us to draw.
+            Even classification can be understood through this picture. Instead of fitting a line directly to a measured value, the network fits class scores or probabilities and places a boundary between groups of samples. Neural-network training is therefore not a completely different idea from curve fitting. It is curve fitting with a much more expressive function, many more parameters, and geometry that is usually too high-dimensional for us to draw. Here, curve fitting is an intuition rather than a literal claim that every neural-network task is ordinary two-dimensional regression.
           </p>
           <p>
             This is also where we often call a model large or small. Modern models can contain billions of parameters. Parameter count is not literally the dimensionality of the input data; instead, it is a rough description of the model&apos;s capacity. More parameters give the model more freedom, but they also make training, validation, and computational cost more important.
@@ -157,6 +164,10 @@ function NeuralNetworkIntroductionArticle({ navigate }) {
           <p>
             That is the simple picture I use to understand a neural network. It is not magic, and it is not merely a huge lookup table. It is a flexible numerical model whose parameters are learned from data and whose credibility still depends on validation, testing, and physical insight.
           </p>
+            </>
+          ) : (
+            <NeuralNetworkIntroductionZh imageBase={imageBase} />
+          )}
         </div>
       </article>
     </main>

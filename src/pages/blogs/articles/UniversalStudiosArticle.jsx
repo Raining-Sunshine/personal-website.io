@@ -1,8 +1,12 @@
+import { useState } from "react";
+import ArticleLanguage from "../../../components/ui/ArticleLanguage";
 import Breadcrumbs from "../../../components/navigation/Breadcrumbs";
 import { routes } from "../../../config/routes";
+import UniversalStudiosEn from "../translations/UniversalStudiosEn";
 import { universalStudiosSourceUrl } from "../../../config/site";
 
 function UniversalStudiosArticle({ navigate }) {
+  const [language, setLanguage] = useState("zh");
   const assetBase = import.meta.env.BASE_URL;
   const imageBase = `${assetBase}life/universal-studios-beijing/`;
 
@@ -17,8 +21,11 @@ function UniversalStudiosArticle({ navigate }) {
           { label: "Universal Studios Beijing" },
         ]}
       />
-      <article className="article-template">
+      <article className="article-template" lang={language === "zh" ? "zh-CN" : "en"}>
         <div className="article-content">
+          <ArticleLanguage language={language} onChange={setLanguage} originalLanguage="zh" />
+          {language === "zh" ? (
+            <>
           <p className="article-meta">July 27, 2022 / Life / Travel</p>
           <h1>闪闪亮亮环球攻略</h1>
           <p className="article-subtitle">Universal Studios Beijing</p>
@@ -97,6 +104,10 @@ function UniversalStudiosArticle({ navigate }) {
           <p className="article-source">
             原文：<a href={universalStudiosSourceUrl} target="_blank" rel="noreferrer">Raining Sunshine / Blogger</a>
           </p>
+            </>
+          ) : (
+            <UniversalStudiosEn imageBase={imageBase} sourceUrl={universalStudiosSourceUrl} />
+          )}
         </div>
       </article>
     </main>

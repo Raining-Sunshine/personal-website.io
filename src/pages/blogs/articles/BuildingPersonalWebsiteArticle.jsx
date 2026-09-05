@@ -1,11 +1,15 @@
+import { useState } from "react";
+import ArticleLanguage from "../../../components/ui/ArticleLanguage";
 import Breadcrumbs from "../../../components/navigation/Breadcrumbs";
 import CodeBlock from "../../../components/ui/CodeBlock";
 import { routes } from "../../../config/routes";
+import BuildingPersonalWebsiteEn from "../translations/BuildingPersonalWebsiteEn";
 
 const githubPagesDocumentUrl =
   "https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site";
 
 function BuildingPersonalWebsiteArticle({ navigate }) {
+  const [language, setLanguage] = useState("zh");
   const imageBase = `${import.meta.env.BASE_URL}computer/building-personal-website/`;
 
   return (
@@ -19,8 +23,11 @@ function BuildingPersonalWebsiteArticle({ navigate }) {
           { label: "Building a personal website" },
         ]}
       />
-      <article className="article-template">
+      <article className="article-template" lang={language === "zh" ? "zh-CN" : "en"}>
         <div className="article-content">
+          <ArticleLanguage language={language} onChange={setLanguage} originalLanguage="zh" />
+          {language === "zh" ? (
+            <>
           <p className="article-meta">July 23, 2026 / Computer / Website</p>
           <h1>Codex编写个人主页的记录</h1>
           <p className="article-subtitle">GitHub Pages、Cloudflare 与 Codex 的个人主页部署记录</p>
@@ -129,6 +136,10 @@ function BuildingPersonalWebsiteArticle({ navigate }) {
           <p>
             再次推送，发过启用 FormSubmit 的验证邮件后，网页就做好啦。
           </p>
+            </>
+          ) : (
+            <BuildingPersonalWebsiteEn imageBase={imageBase} githubPagesDocumentUrl={githubPagesDocumentUrl} />
+          )}
         </div>
       </article>
     </main>

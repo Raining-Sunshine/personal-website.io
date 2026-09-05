@@ -70,11 +70,12 @@ button, a { font: inherit; }
 .article-meta { color: var(--violet); font-size: 0.8rem; font-weight: 700; }
 .article-content h1 { font-size: clamp(2.2rem, 6vw, 4rem); margin: 12px 0; }
 .article-subtitle { font-size: 1.2rem; color: #6e6474; margin-bottom: 50px; }
-.article-toolbar { display: flex; justify-content: flex-end; margin-bottom: 28px; }
+.article-language-header { display: grid; justify-items: end; gap: 10px; margin-bottom: 28px; }
 .language-switch { display: inline-grid; grid-template-columns: repeat(2, minmax(74px, 1fr)); gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 8px; background: #fffafb; }
 .language-switch button { min-height: 36px; border: 0; border-radius: 6px; padding: 7px 13px; background: transparent; color: var(--ink); cursor: pointer; font-weight: 700; }
 .language-switch button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 .language-switch button:focus-visible { outline: 3px solid rgba(126, 87, 194, 0.25); outline-offset: 2px; }
+.article-language-note { max-width: 620px; margin: 0; color: #6e6474; font-size: 0.82rem; line-height: 1.55; text-align: right; }
 .article-content h2 { margin-top: 40px; }
 .article-content > p { line-height: 1.85; }
 .article-content figure { margin: 36px 0; }

@@ -1,7 +1,11 @@
+import { useState } from "react";
+import ArticleLanguage from "../../../components/ui/ArticleLanguage";
 import Breadcrumbs from "../../../components/navigation/Breadcrumbs";
 import { routes } from "../../../config/routes";
+import Comsol64GpuTestEn from "../translations/Comsol64GpuTestEn";
 
 function Comsol64GpuTestArticle({ navigate }) {
+  const [language, setLanguage] = useState("zh");
   const imageBase = `${import.meta.env.BASE_URL}modelling/comsol64-test/`;
 
   return (
@@ -15,8 +19,11 @@ function Comsol64GpuTestArticle({ navigate }) {
           { label: "COMSOL 6.4 GPU test" },
         ]}
       />
-      <article className="article-template">
+      <article className="article-template" lang={language === "zh" ? "zh-CN" : "en"}>
         <div className="article-content">
+          <ArticleLanguage language={language} onChange={setLanguage} originalLanguage="zh" />
+          {language === "zh" ? (
+            <>
           <p className="article-meta">July 23, 2026 / Modelling / COMSOL</p>
           <h1>简单对COMSOL6.4的GPU加速做一个测试</h1>
           <p className="article-subtitle">COMSOL 6.4、cuDSS 与消费级 GPU 的简单测试记录</p>
@@ -116,6 +123,10 @@ function Comsol64GpuTestArticle({ navigate }) {
           <p>
             但是无疑，现有阶段，非特殊情况下用户不必着急升级 GPU 加速求解。COMSOL 的占用仍然是以内存为优先。
           </p>
+            </>
+          ) : (
+            <Comsol64GpuTestEn imageBase={imageBase} />
+          )}
         </div>
       </article>
     </main>

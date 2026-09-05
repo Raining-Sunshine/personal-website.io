@@ -1,10 +1,14 @@
+import { useState } from "react";
+import ArticleLanguage from "../../../components/ui/ArticleLanguage";
 import Breadcrumbs from "../../../components/navigation/Breadcrumbs";
 import CodeBlock from "../../../components/ui/CodeBlock";
 import { routes } from "../../../config/routes";
+import FrpRdpEn from "../translations/FrpRdpEn";
 import { frpReleasesUrl } from "../../../config/site";
 import { batScript, clientConfig, serverConfig } from "../../../content/frpCodeBlocks";
 
 function FrpRdpArticle({ navigate }) {
+  const [language, setLanguage] = useState("zh");
   return (
     <main className="sub-main">
       <Breadcrumbs
@@ -16,8 +20,11 @@ function FrpRdpArticle({ navigate }) {
           { label: "FRP remote desktop" },
         ]}
       />
-      <article className="article-template">
+      <article className="article-template" lang={language === "zh" ? "zh-CN" : "en"}>
         <div className="article-content">
+          <ArticleLanguage language={language} onChange={setLanguage} originalLanguage="zh" />
+          {language === "zh" ? (
+            <>
           <p className="article-meta">Computer / Remote access</p>
           <h1>利用 frp 实现内网穿透的远程桌面配置记录</h1>
           <p>
@@ -70,6 +77,10 @@ rm frpc.toml`}</CodeBlock>
           <p>可以访问 127.0.0.1:7400 查看面板。</p>
           <p>远程访问时，机器直接填【公网 IP:RDP 端口】即可。比如本例中就是【公网 IP:7100】。</p>
           <p>目前我这里面防护还是比较薄弱，后面可以做一个访问前的验证。看到某些帖子说 STCP 比较稳，准备看看。</p>
+            </>
+          ) : (
+            <FrpRdpEn frpReleasesUrl={frpReleasesUrl} />
+          )}
         </div>
       </article>
     </main>
