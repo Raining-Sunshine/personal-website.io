@@ -6,6 +6,7 @@ export const routes = {
   neuralNetworkIntroduction: "blogs/modelling/neural-network-introduction",
   flaskGeometry: "blogs/modelling/flask-geometry-without-parametric-curves",
   computer: "computer",
+  vpnDeployment: "blogs/computer/simple-vpn-deployment",
   life: "life",
   universalStudios: "universal-studios-beijing",
   frpRdp: "frp-rdp",

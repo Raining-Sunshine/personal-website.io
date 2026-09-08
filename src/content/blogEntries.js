@@ -9,6 +9,7 @@ export const blogEntries = {
     { title: "Computational Chemistry Forum Blog", label: "External link", href: keinsciUrl },
   ],
   computer: [
+    { title: "一个简单的VPN部署教程", label: "VPN / Bilingual", route: routes.vpnDeployment },
     { title: "Codex编写个人主页的记录", label: "Website / Deployment", route: routes.buildingPersonalWebsite },
     { title: "利用 frp 实现内网穿透的远程桌面配置记录", label: "Remote desktop", route: routes.frpRdp },
   ],

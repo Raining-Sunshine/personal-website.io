@@ -1,3 +1,4 @@
+import VpnDeploymentArticle from "../pages/blogs/articles/VpnDeploymentArticle";
 import { routes } from "../config/routes";
 import { blogEntries } from "../content/blogEntries";
 import Contact from "../pages/Contact";
@@ -15,6 +16,8 @@ import UniversalStudiosArticle from "../pages/blogs/articles/UniversalStudiosArt
 
 function RouteContent({ route, navigate }) {
   switch (route) {
+    case routes.vpnDeployment:
+      return <VpnDeploymentArticle navigate={navigate} />;
     case routes.blog:
       return <BlogDirectory navigate={navigate} />;
     case routes.modelling:
