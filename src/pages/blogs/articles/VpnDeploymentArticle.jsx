@@ -31,16 +31,18 @@ export default function VpnDeploymentArticle({ navigate }) {
         <h1>{text[0]}</h1>
         <aside className="article-note"><p>{text[1]}</p></aside>
         <p>{text[2]}</p>
+        <div className="vpn-architecture-grid">
         {["mobile", "desktop"].map((device) => <figure key={device}>
           <img className="article-photo" style={{ width: "auto", maxWidth: "100%", height: "auto" }} src={`${imageBase}${device}-${language}.png`} alt={language === "zh" ? (device === "mobile" ? "移动端架构图" : "桌面端架构图") : (device === "mobile" ? "Mobile architecture" : "Desktop architecture")} />
         </figure>)}
+        </div>
         <h2>{text[3]}</h2>
         <p>{text[4]}<ExternalLink href={openvpnUrl} />{text[5]}</p>
-        <p>{text[6]}</p>
+        <p className="vpn-step-start">{text[6]}</p>
         <CodeBlock>{profile}</CodeBlock>
         <p>{text[7]}</p>
-        <p>{text[8]}</p>
-        <p>{text[9]}<ExternalLink href={stunnelUrl} />{text[10]}</p>
+        <p className="vpn-step-start">{text[8]}</p>
+        <p className="vpn-step-start">{text[9]}<ExternalLink href={stunnelUrl} />{text[10]}</p>
         <CodeBlock>{stunnel}</CodeBlock>
         <p>{text[11]}<ExternalLink href={connectUrl} />{text[12]}</p>
       </div>

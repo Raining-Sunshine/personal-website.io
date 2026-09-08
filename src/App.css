@@ -195,3 +195,8 @@ button, a { font: inherit; }
   line-height: 1.65;
   white-space: pre;
 }
+
+.vpn-architecture-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; margin: 36px 0; }
+.article-content .vpn-architecture-grid figure { margin: 0; min-width: 0; }
+.article-content .vpn-step-start { margin-top: 40px; }
+@media (max-width: 600px) { .vpn-architecture-grid { gap: 12px; } }
