@@ -2,6 +2,7 @@ export const routes = {
   home: "home",
   blog: "blog",
   modelling: "modelling",
+  vramScientificComputation: "blogs/modelling/VRAM-in-scientific-computation",
   comsol64Test: "blogs/modelling/COMSOL64-test",
   neuralNetworkIntroduction: "blogs/modelling/neural-network-introduction",
   flaskGeometry: "blogs/modelling/flask-geometry-without-parametric-curves",

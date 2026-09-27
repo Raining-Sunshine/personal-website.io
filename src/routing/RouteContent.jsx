@@ -8,6 +8,7 @@ import Research from "../pages/Research";
 import BlogCategory from "../pages/blogs/BlogCategory";
 import BlogDirectory from "../pages/blogs/BlogDirectory";
 import BuildingPersonalWebsiteArticle from "../pages/blogs/articles/BuildingPersonalWebsiteArticle";
+import VramScientificComputationArticle from "../pages/blogs/articles/VramScientificComputationArticle";
 import Comsol64GpuTestArticle from "../pages/blogs/articles/Comsol64GpuTestArticle";
 import FrpRdpArticle from "../pages/blogs/articles/FrpRdpArticle";
 import FlaskGeometryArticle from "../pages/blogs/articles/FlaskGeometryArticle";
@@ -22,6 +23,8 @@ function RouteContent({ route, navigate }) {
       return <BlogDirectory navigate={navigate} />;
     case routes.modelling:
       return <BlogCategory category="Modelling" entries={blogEntries.modelling} navigate={navigate} />;
+    case routes.vramScientificComputation:
+      return <VramScientificComputationArticle navigate={navigate} />;
     case routes.comsol64Test:
       return <Comsol64GpuTestArticle navigate={navigate} />;
     case routes.neuralNetworkIntroduction:
