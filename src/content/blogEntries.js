@@ -2,7 +2,7 @@ import { routes } from "../config/routes";
 import { keinsciUrl } from "../config/site";
 export const blogEntries = {
   modelling: [
-    { title: "GPU显存大小在cuDSS求解过程中的重要性", label: "VRAM / Bilingual", route: routes.vramScientificComputation },
+    { title: "GPU显存大小在cuDSS求解过程中的重要性", label: "COMSOL/VRAM-in-scientific-computation", route: routes.vramScientificComputation },
     { title: "不使用参数化曲线，对烧瓶模型的几何建模", label: "Geometry/Flask", route: routes.flaskGeometry },
     { title: "How Does a Neural Network Work?", label: "Neural network / Basics", route: routes.neuralNetworkIntroduction },
     { title: "简单对COMSOL6.4的GPU加速做一个测试", label: "COMSOL/GPU-test", route: routes.comsol64Test },
