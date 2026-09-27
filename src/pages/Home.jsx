@@ -13,7 +13,7 @@ function Home({ navigate }) {
           <p className="eyebrow">About me</p>
           <h1>Hi, this is Diotima</h1>
           <p>
-            I enjoy materials science and am currently applying for PhD programs. My main focus is computational materials science, and I work with tools such as COMSOL and Gaussian. I also enjoy computer-related topics, including neural networks, cybersecurity, and algorithms.
+            I enjoy Materials Science and currently doing PhD in Mechanical Engineering. My main focus is computational materials science, and I work with tools such as COMSOL and Gaussian. I also enjoy computer-related topics, including neural networks, cybersecurity, and algorithms.
           </p>
           <p>
             I also write fanfiction on AO3. Most of my works are in Chinese, and I am gradually bringing links and notes back into this site.
