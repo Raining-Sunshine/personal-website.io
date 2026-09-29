@@ -9,6 +9,7 @@ export const blogEntries = {
     { title: "Computational Chemistry Forum Blog", label: "External link", href: keinsciUrl },
   ],
   computer: [
+    { title: "环境配置：记录一次新电脑的环境配置过程", label: "Environment / WSL", route: routes.environmentSetup },
     { title: "一个简单的VPN部署教程", label: "VPN / deployment", route: routes.vpnDeployment },
     { title: "Codex编写个人主页的记录", label: "Website / Codex", route: routes.buildingPersonalWebsite },
     { title: "利用 frp 实现内网穿透的远程桌面配置记录", label: "Intranet penetration/frp", route: routes.frpRdp },

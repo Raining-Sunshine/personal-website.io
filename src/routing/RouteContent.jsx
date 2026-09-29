@@ -1,3 +1,4 @@
+import EnvironmentSetupArticle from "../pages/blogs/articles/EnvironmentSetupArticle";
 import VpnDeploymentArticle from "../pages/blogs/articles/VpnDeploymentArticle";
 import { routes } from "../config/routes";
 import { blogEntries } from "../content/blogEntries";
@@ -17,6 +18,8 @@ import UniversalStudiosArticle from "../pages/blogs/articles/UniversalStudiosArt
 
 function RouteContent({ route, navigate }) {
   switch (route) {
+    case routes.environmentSetup:
+      return <EnvironmentSetupArticle navigate={navigate} />;
     case routes.vpnDeployment:
       return <VpnDeploymentArticle navigate={navigate} />;
     case routes.blog:
