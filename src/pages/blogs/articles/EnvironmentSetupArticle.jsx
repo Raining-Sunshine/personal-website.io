@@ -53,7 +53,7 @@ const blocks = {
   aliasZh: "nano ~/.bashrc\nalias activate_da=\"source ~/.venv/data_analysis/bin/activate\"",
   aliasEn: "nano ~/.bashrc\nalias activate_da=\"source ~/.venv/data_analysis/bin/activate\"",
   activate: "source ~/.bashrc\nactivate_da\npip install numpy scipy matplotlib pandas\ndeactivate",
-  dsh: "sudo apt install git\nmkdir -p ~/.venv/dsh\nwget https://nodejs.org/dist/latest-v22.x/node-v22.20.0-linux-x64.tar.xz\ntar -xJf node-v22.20.0-linux-x64.tar.xz     --strip-components=1     -C ~/.venv/dsh\n\ndpkg -S /usr/bin/node /usr/bin/npm\n\nnpx @deepseek-ai/dsh web"
+  dsh: "sudo apt install git\nmkdir -p ~/.venv/dsh\nwget https://nodejs.org/dist/latest-v22.x/node-v22.20.0-linux-x64.tar.xz\ntar -xJf node-v22.20.0-linux-x64.tar.xz --strip-components=1 -C ~/.venv/dsh\nexport PATH=\"$HOME/.venv/dsh/bin:$PATH\"\nnode --version\nnpm --version\nnpx --yes @deepseek-ai/dsh web"
 };
 
 function ExternalLink({ href }) {
