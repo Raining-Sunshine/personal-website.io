@@ -16,7 +16,7 @@ button, a { font: inherit; }
 .hero-header { position: relative; height: 260px; overflow: hidden; border-bottom: 1px solid var(--line); }
 .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.95) contrast(0.96); }
 .hero-overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 36px clamp(24px, 6vw, 88px); background: linear-gradient(to top, rgba(126, 87, 194, 0.34), rgba(252, 228, 236, 0.12)); }
-.site-title { font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 700; }
+.site-title { font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 700; color: #fff; }
 .thin-strip { height: 14px; background: repeating-linear-gradient(90deg, #f8bbd0 0, #f8bbd0 80px, #e1bee7 80px, #e1bee7 160px, #fff 160px, #fff 240px); }
 
 .main-nav { display: flex; justify-content: center; gap: clamp(18px, 6vw, 72px); padding: 18px 20px; background: rgba(255, 255, 255, 0.86); border-bottom: 1px solid rgba(126, 87, 194, 0.16); position: sticky; top: 0; z-index: 10; backdrop-filter: blur(10px); }
