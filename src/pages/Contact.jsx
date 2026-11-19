@@ -92,7 +92,7 @@ function Contact({ navigate }) {
           <input type="hidden" name="_template" value="table" />
           <input type="hidden" name="_blacklist" value={blockedMessageTerms.join(", ")} />
           <input type="hidden" name="_captcha" value="true" />
-          <input type="hidden" name="_next" value={`${location.origin}${location.pathname}?sent=1#/contact`} />
+          <input type="hidden" name="_next" value={"https://diotimachang.com/contact?sent=1"} />
           <div className="contact-honey" aria-hidden="true">
             <label htmlFor="contact-website">Website</label>
             <input id="contact-website" type="text" name="_honey" tabIndex="-1" autoComplete="off" />

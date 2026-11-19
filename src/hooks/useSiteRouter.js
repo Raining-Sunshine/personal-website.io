@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { routes } from "../config/routes";
 
 export function useSiteRouter() {
-  const [route, setRoute] = useState(routes.home);
+  const [route, setRoute] = useState(() => {
+    const path = location.pathname.replace(/^\/+|\/+$/g, "") || routes.home;
+    return Object.values(routes).includes(path) ? path : routes.home;
+  });
   useEffect(() => {
     const sync = () => {
       const next = location.pathname.replace(/^\/+|\/+$/g, "") || routes.home;

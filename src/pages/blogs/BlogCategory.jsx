@@ -23,7 +23,8 @@ function BlogCategory({ category, entries, navigate }) {
             title={entry.title}
             label={entry.label}
             href={entry.href}
-            onClick={entry.route ? () => navigate(entry.route) : undefined}
+            route={entry.route}
+            navigate={navigate}
           />
         ))}
       </section>

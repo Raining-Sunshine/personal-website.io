@@ -1,3 +1,4 @@
+import SiteLink from "../navigation/SiteLink";
 import { routes } from "../../config/routes";
 
 function Header({ navigate }) {
@@ -13,10 +14,10 @@ function Header({ navigate }) {
       </header>
       <div className="thin-strip" aria-hidden="true" />
       <nav className="main-nav" aria-label="Main navigation">
-        <button onClick={() => navigate(routes.home)}>Home</button>
-        <button onClick={() => navigate(routes.blog)}>Blogs</button>
-        <button onClick={() => navigate(routes.research)}>Research</button>
-        <button onClick={() => navigate(routes.links)}>Links</button>
+        <SiteLink route={routes.home} navigate={navigate}>Home</SiteLink>
+        <SiteLink route={routes.blog} navigate={navigate}>Blogs</SiteLink>
+        <SiteLink route={routes.research} navigate={navigate}>Research</SiteLink>
+        <SiteLink route={routes.links} navigate={navigate}>Links</SiteLink>
       </nav>
     </>
   );

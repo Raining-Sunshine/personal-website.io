@@ -1,3 +1,4 @@
+import SiteLink from "../components/navigation/SiteLink";
 import { routes } from "../config/routes";
 
 function Home({ navigate }) {
@@ -25,22 +26,22 @@ function Home({ navigate }) {
         <article className="section-card">
           <h2>Blogs</h2>
           <p>Modelling, computer, and life.</p>
-          <button onClick={() => navigate(routes.blog)}>Open blogs</button>
+          <SiteLink route={routes.blog} navigate={navigate}>Open blogs</SiteLink>
         </article>
         <article className="section-card">
           <h2>Research</h2>
           <p>Academic CV and researchs.</p>
-          <button onClick={() => navigate(routes.research)}>Open research</button>
+          <SiteLink route={routes.research} navigate={navigate}>Open research</SiteLink>
         </article>
         <article className="section-card">
           <h2>Links</h2>
           <p>GitHub and AO3.</p>
-          <button onClick={() => navigate(routes.links)}>Open links</button>
+          <SiteLink route={routes.links} navigate={navigate}>Open links</SiteLink>
         </article>
         <article className="section-card">
           <h2>Contact me</h2>
-          <p>Latest update: 2026-09-29 21:35 (UTC+8).</p>
-          <button onClick={() => navigate(routes.contact)}>Leave a message</button>
+          <p>Latest update: 2026-11-19 13:01 (UTC+8).</p>
+          <SiteLink route={routes.contact} navigate={navigate}>Leave a message</SiteLink>
         </article>
       </section>
     </main>

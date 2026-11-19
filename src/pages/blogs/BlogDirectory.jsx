@@ -10,9 +10,9 @@ function BlogDirectory({ navigate }) {
         <h1>Blogs</h1>
       </header>
       <section className="directory-grid">
-        <DirectoryCard title="Modelling" description="Computational materials, modelling, and simulation notes." onClick={() => navigate(routes.modelling)} />
-        <DirectoryCard title="Computer" description="Computer science, security, algorithms, tools, and remote access notes." onClick={() => navigate(routes.computer)} />
-        <DirectoryCard title="Life" description="Personal and everyday-life notes." onClick={() => navigate(routes.life)} />
+        <DirectoryCard title="Modelling" description="Computational materials, modelling, and simulation notes." route={routes.modelling} navigate={navigate} />
+        <DirectoryCard title="Computer" description="Computer science, security, algorithms, tools, and remote access notes." route={routes.computer} navigate={navigate} />
+        <DirectoryCard title="Life" description="Personal and everyday-life notes." route={routes.life} navigate={navigate} />
       </section>
     </main>
   );

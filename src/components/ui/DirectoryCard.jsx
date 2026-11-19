@@ -1,10 +1,11 @@
-function DirectoryCard({ title, description, onClick }) {
+import SiteLink from "../navigation/SiteLink";
+function DirectoryCard({ title, description, route, navigate }) {
   return (
-    <button className="directory-card" onClick={onClick}>
+    <SiteLink className="directory-card" route={route} navigate={navigate}>
       <h2>{title}</h2>
       <p>{description}</p>
       <span>Open directory</span>
-    </button>
+    </SiteLink>
   );
 }
 
